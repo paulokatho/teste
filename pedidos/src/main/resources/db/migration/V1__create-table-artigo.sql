@@ -1,0 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE artigo (
+	id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+	nome VARCHAR(150) NOT NULL,
+	status BOOLEAN NOT NULL
+);
