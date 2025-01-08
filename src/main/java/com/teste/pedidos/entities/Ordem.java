@@ -1,11 +1,11 @@
 package com.teste.pedidos.entities;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,18 +16,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="movimento_acoes")
-@Table(name="movimento_acoes")
+@Entity
+@Table(name = "ordem")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
-public class MovimentoAcoes {
-
+public class Ordem {
+    
 	@Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao;
@@ -35,8 +35,15 @@ public class MovimentoAcoes {
     @Column(nullable = false)
     private int quantidade;
 
+    @Column(nullable = false)
+    private boolean status;
+
     @ManyToOne
     @JoinColumn(name = "artigo_id")
     private Artigo artigo;
-	
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
 }
