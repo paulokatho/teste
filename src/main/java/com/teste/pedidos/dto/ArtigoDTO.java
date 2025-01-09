@@ -1,68 +1,44 @@
-package com.teste.pedidos.entities;
+package com.teste.pedidos.dto;
 
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+public class ArtigoDTO {
 
-@Entity(name="artigo")
-@Table(name="artigo")
-public class Artigo {
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, length = 150)
-    private String nome;
-
-    @Column(nullable = false)
-    private boolean status;
-
+	private Long id;
+	private String nome;
+	private boolean status;
+	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 	public boolean isStatus() {
 		return status;
 	}
-
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-
-	public Artigo(Long id, String nome, boolean status) {
+	public ArtigoDTO(Long id, String nome, boolean status) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.status = status;
 	}
-
-	public Artigo() {
+	public ArtigoDTO() {
 		super();
 	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -71,8 +47,8 @@ public class Artigo {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Artigo other = (Artigo) obj;
+		ArtigoDTO other = (ArtigoDTO) obj;
 		return Objects.equals(id, other.id);
 	}
-    
+	
 }

@@ -71,6 +71,24 @@
 			<artifactId>flyway-core</artifactId>
 			<version>9.10.2</version>
 		</dependency>-->
+		<!--MAPSTRUCT-->
+		<dependency>
+	    <groupId>org.mapstruct</groupId>
+	    <artifactId>mapstruct</artifactId>
+	    <version>1.5.2.Final</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+	<dependency>
+	    <groupId>org.springdoc</groupId>
+	    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+	    <version>2.3.0</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.mapstruct</groupId>
+	    <artifactId>mapstruct-processor</artifactId>
+	    <version>1.5.2.Final</version>
+	    <scope>provided</scope>
+	</dependency>
 	</dependencies>
 
 	<build>
@@ -99,6 +117,24 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			
+				<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <version>3.8.1</version>
+	            <configuration>
+	                <source>8</source>
+	                <target>8</target>
+	                <annotationProcessorPaths>
+	                    <path>
+	                        <groupId>org.mapstruct</groupId>
+	                        <artifactId>mapstruct-processor</artifactId>
+	                        <version>1.5.2.Final</version>
+	                    </path>
+	                </annotationProcessorPaths>
+	            </configuration>
+	        </plugin>
+			
 		</plugins>
 	</build>
 
