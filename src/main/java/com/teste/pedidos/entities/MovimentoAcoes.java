@@ -29,6 +29,12 @@ public class MovimentoAcoes {
     @ManyToOne
     @JoinColumn(name = "artigo_id")
     private Artigo artigo;
+    
+    @Column(nullable = false)
+    private boolean status;
+
+	@Column(nullable = false, updatable = false, unique = true)
+    private String transacaoId;
 
 	public Long getId() {
 		return id;
@@ -62,6 +68,22 @@ public class MovimentoAcoes {
 		this.artigo = artigo;
 	}
 
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
+    public String getTransacaoId() {
+		return transacaoId;
+	}
+
+	public void setTransacaoId(String transacao) {
+		this.transacaoId = transacao;
+	}
+
 	public MovimentoAcoes(Long id, LocalDateTime dataCriacao, int quantidade, Artigo artigo) {
 		super();
 		this.id = id;
@@ -90,5 +112,6 @@ public class MovimentoAcoes {
 		MovimentoAcoes other = (MovimentoAcoes) obj;
 		return Objects.equals(id, other.id);
 	}
+	
 	
 }
