@@ -31,25 +31,27 @@
   <tr>
     <td>Java</td>
     <td>Versão da api do java utilizada</td>
-    <td>Maven</td>
-    <td>PostgreSQL</td>
     <td>Spring Boot</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>Maven</td>
+    <td>PostgreSQL</td>    
+    <td>JPA</td>
+    <td>Hibernate</td>
+    <td>Slf4j</td>
+    <td>Mapstruct</td>
+    <td>Swagger</td>
+    <td>Starter email</td>
   </tr>
   <tr>
     <td>17</td>
     <td>1.8</td>
+    <td>3.3.7</td>
     <td>3.8.1</td>
     <td>14.15</td>
-    <td>3.3.7</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>Default</td>
+    <td>Default</td>
+    <td>Default</td>
+    <td>1.5.2.Final</td>
+    <td>2.3.0</td>
+    <td>Defalut</td>
   </tr>
 </table>
