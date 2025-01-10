@@ -32,5 +32,4 @@ public class UsuarioDTO {
 		this.status = status;
 	}
     
-    
 }
