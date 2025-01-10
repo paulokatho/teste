@@ -3,7 +3,7 @@ package com.teste.pedidos.entities;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.teste.pedidos.enums.StatusEmail;
+import com.teste.pedidos.enums.StatusEmailEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +24,7 @@ public class Email {
     @Column(columnDefinition = "TEXT")
     private String text;
     private LocalDateTime sendDateEmail;
-    private StatusEmail statusEmail;
+    private StatusEmailEnum statusEmail;
     
     
 	public Long getEmailId() {
@@ -69,10 +69,10 @@ public class Email {
 	public void setSendDateEmail(LocalDateTime sendDateEmail) {
 		this.sendDateEmail = sendDateEmail;
 	}
-	public StatusEmail getStatusEmail() {
+	public StatusEmailEnum getStatusEmail() {
 		return statusEmail;
 	}
-	public void setStatusEmail(StatusEmail statusEmail) {
+	public void setStatusEmail(StatusEmailEnum statusEmail) {
 		this.statusEmail = statusEmail;
 	}
 	public Email(Long emailId, String ownerRef, String emailFrom, String emailTo, String subject, String text,

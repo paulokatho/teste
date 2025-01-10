@@ -3,6 +3,8 @@ package com.teste.pedidos.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +21,14 @@ public class MovimentoAcoesService {
 
 	@Autowired(required = true)
 	private MovimentoAcoesMapper mapper;
+	
+	private static final Logger logger = LoggerFactory.getLogger(MovimentoAcoesService.class);
 
 	public MovimentoAcoesDTO guardar(MovimentoAcoesDTO dto) throws Exception {		
 		MovimentoAcoes movimentoAcoes = repository.save(mapper.paraMovimentoAcoes(dto));
+		
+		logger.info("Movimentação gravada com sucesso.");
+		
 		return mapper.paraMovimentoAcoesDTO(movimentoAcoes);
 	}
 
@@ -46,8 +53,13 @@ public class MovimentoAcoesService {
 		if (movimentoAcoesEntity.isPresent()) {
 			MovimentoAcoes movimentoAcoes = movimentoAcoesEntity.get();
 			movimentoAcoes.setQuantidade(dto.getQuantidade());
+			
 			repository.save(movimentoAcoes);
+			
+			logger.info("Movimentação atualizada com sucesso.");
 		} else {
+			logger.error("Movimento Ações não encontrada.");
+			
 			throw new Exception("Movimento Ações encontrado");
 		}
 	}
@@ -57,6 +69,8 @@ public class MovimentoAcoesService {
 		movimentoAcoesEntity.setStatus(false);
 		
 		repository.save(movimentoAcoesEntity);
+		
+		logger.info("Movimento Ações atualizada com sucesso.");
 	}
 
 	public void excluir(Long id) throws Exception { 
@@ -64,8 +78,12 @@ public class MovimentoAcoesService {
 		if (movimentoAcoesEntity.isPresent()) {
 			MovimentoAcoes entity = movimentoAcoesEntity.get();
 			entity.setStatus(false);
-			repository.save(entity);            
+			
+			repository.save(entity);
+			
+			logger.info("Movimento Ações excluída logicamente com sucesso.");
 		} else {
+			logger.error("Movimento Ações não encontrada.");
 			throw new Exception("Movimento Ações encontrado");
 		}
 	}

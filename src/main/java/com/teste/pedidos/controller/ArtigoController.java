@@ -2,6 +2,8 @@ package com.teste.pedidos.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teste.pedidos.dto.ArtigoDTO;
+import com.teste.pedidos.entities.Artigo;
 import com.teste.pedidos.services.ArtigoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +32,8 @@ public class ArtigoController {
 	@Autowired
 	private ArtigoService service;
 	
+	private static final Logger logger = LoggerFactory.getLogger(ArtigoController.class);
+	
     @PostMapping
     @Operation(summary = "Salva dados do artigo", description = "Método para salvar dados do artigo")
     @ApiResponse(responseCode = "201", description = "Artigo gravado com sucesso")
@@ -36,13 +41,16 @@ public class ArtigoController {
     @ApiResponse(responseCode = "500", description = "Erro no servidor")
     public ResponseEntity<ArtigoDTO> create(@RequestBody ArtigoDTO dto) {
             	
-    	if(dto == null || dto.getId() != null)
+    	if(dto == null || dto.getId() != null) {
+    		logger.error("Erro na requisição para guardar artigo.");
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    	}
     	
     	try {
     		ArtigoDTO responseDTO = service.guardar(dto);
     		return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);			
 		} catch (Exception e) {
+			logger.error("Erro na requisição para guardar artigo.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}        
     }
@@ -54,13 +62,16 @@ public class ArtigoController {
     @ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<ArtigoDTO> obterPorId(@PathVariable Long id) {		
 		
-    	if(id == null)
+    	if(id == null) {
+    		logger.error("Erro na requisição para obter artigo por id.");
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    	}
     	
     	try {
     		ArtigoDTO responseDTO = service.obterPorId(id);
     		return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro. Artigo não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}    
 	}
@@ -76,6 +87,7 @@ public class ArtigoController {
     		List<ArtigoDTO> responseDTO = service.obterTodos();
     		return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro na requisição para obter todos os artigos.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}   
 	}
@@ -89,14 +101,17 @@ public class ArtigoController {
     public ResponseEntity<ArtigoDTO> atualizar(@PathVariable Long id,
     											@RequestBody ArtigoDTO dto){
         
-    	if(dto == null)
+    	if(dto == null) {
+    		logger.error("Erro na requisição para guardar artigo.");
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    	}
     	
     	try {
     		service.atualizar(dto);
     		ArtigoDTO responseDTO = service.obterPorId(id);
     		return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro ao atualizar artigo. Artigo não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
     }
@@ -109,14 +124,17 @@ public class ArtigoController {
     @ApiResponse(responseCode = "500", description = "Erro no servidor")
     public ResponseEntity<ArtigoDTO> excluir(@PathVariable Long id) {
         
-    	if(id == null)
+    	if(id == null) {
+    		logger.error("Erro na requisição para excluir artigo.");
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    	}
     	
     	try {
     		//Exclui logicamente
-    		service.excluir(id);    		
-    		return new ResponseEntity<>(new ArtigoDTO(), HttpStatus.OK);	
+    		ArtigoDTO dto= service.excluir(id);    		
+    		return new ResponseEntity<>(dto, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro para excluir logicamente artigo. Artigo não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
     }

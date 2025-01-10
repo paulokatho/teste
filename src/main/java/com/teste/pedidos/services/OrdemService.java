@@ -1,5 +1,6 @@
 package com.teste.pedidos.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import com.teste.pedidos.dto.ArtigoDTO;
 import com.teste.pedidos.dto.OrdemDTO;
 import com.teste.pedidos.entities.MovimentoAcoes;
 import com.teste.pedidos.entities.Ordem;
+import com.teste.pedidos.enums.SituacaoPedidoEnum;
 import com.teste.pedidos.mapstruct.ArtigoMapper;
 import com.teste.pedidos.mapstruct.MovimentoAcoesMapper;
 import com.teste.pedidos.mapstruct.OrdemMapper;
@@ -31,6 +33,9 @@ public class OrdemService {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@Autowired(required = true)
 	private OrdemMapper mapper;
@@ -44,19 +49,21 @@ public class OrdemService {
 	private static final Logger logger = LoggerFactory.getLogger(OrdemService.class);
 
 	public OrdemDTO guardar(OrdemDTO dto) throws Exception {
-		System.out.println("Entrou no service: ");
 		
-		ArtigoDTO artigoDTO =  artigoService.obterPorId(dto.getArtigoDTO().getId());	
-		
+		ArtigoDTO artigoDTO =  artigoService.obterPorId(dto.getArtigo().getId());			
 		if(artigoDTO.getQuantidade() < dto.getQuantidade()) {
+			logger.error("Erro ao guardar Pedido. Não temos a quantidade necessária para esse pedido.");
 			throw new Exception("Não temos a quantidade necessária para esse pedido. Disponível: " + dto.getQuantidade());
 		}
-		
-		dto.
+		dto.setSituacaoPedido(SituacaoPedidoEnum.PROCESSANDO.toString());
+		dto.setDataCriacao(LocalDateTime.now());
+		dto.setStatus(true);
 		Ordem ordem = repository.save(mapper.paraOrdem(dto));
 		
+		logger.info("Pedido gravado com sucesso.");
+		
 		MovimentoAcoes ma = new MovimentoAcoes();
-		ma.setArtigo(artigoMapper.paraArtigo(dto.getArtigoDTO()));
+		ma.setArtigo(artigoMapper.paraArtigo(dto.getArtigo()));
 		ma.setDataCriacao(ordem.getDataCriacao());
 		ma.setQuantidade(dto.getQuantidade());
 		ma.setStatus(true);
@@ -65,16 +72,22 @@ public class OrdemService {
 		movimentoAcoesService.guardar(maMapper.paraMovimentoAcoesDTO(ma));
 		
 		int novaQuantidade = artigoDTO.getQuantidade()- ordem.getQuantidade();
-		System.out.println("Nova quantidade: " + novaQuantidade);
 		artigoDTO.setQuantidade(novaQuantidade);
 		artigoDTO = artigoService.atualizarQuantidade(artigoDTO);
 		
 		OrdemDTO ordemDTO = mapper.paraOrdemDTO(ordem); 
-		ordemDTO.setArtigoDTO(artigoDTO);
+		ordemDTO.setArtigo(artigoDTO);
 		
-		ordemDTO.setUsuarioDTO(usuarioService.obterPorId(dto.getUsuarioDTO().getId()));
+		ordemDTO.setUsuario(usuarioService.obterPorId(dto.getUsuario().getId()));
+
+		//Seta pedido como concluído
+		ordem.setSituacaoPedido(SituacaoPedidoEnum.CONCLUÍDO.toString());
+		repository.save(ordem);
 		
-		logger.info("Pedido concoluído");
+		//Prepara e envia email
+		emailService.sendEmailPedido(ordemDTO);
+		
+		logger.info("Pedido concoluído.");
 		
 		return ordemDTO; 
 	}
@@ -98,18 +111,22 @@ public class OrdemService {
 	public void atualizar(OrdemDTO dto) throws Exception { 	
 		Optional<Ordem> ordemEntity = repository.findById(dto.getId());
 		if (ordemEntity.isPresent()) {
-			Ordem ordem = ordemEntity.get();
 			//Atualiza o status para false e retorna a quantidade para o artigo
+			Ordem ordem = ordemEntity.get();
 			ordem.setStatus(false);
+			ordem.setSituacaoPedido(SituacaoPedidoEnum.PENDENTE.toString());
+			
 			repository.save(ordem);
 			
-			ArtigoDTO artigoDTO = artigoService.obterPorId(dto.getArtigoDTO().getId());
+			logger.info("Pedido atualizado com sucesso.");
+			
+			ArtigoDTO artigoDTO = artigoService.obterPorId(dto.getArtigo().getId());
 			int novaQuantidade = ordem.getQuantidade() + artigoDTO.getQuantidade();
 			artigoDTO.setQuantidade(novaQuantidade);
 			
 			movimentoAcoesService.atualizarStatus(dto.getTransacaoId());
 			
-			artigoService.atualizarQuantidade(null);
+			artigoService.atualizarQuantidade(dto.getArtigo());			
 		} else {
 			throw new Exception("Ordem não encontrada");
 		}
@@ -119,9 +136,14 @@ public class OrdemService {
 		Optional<Ordem> ordemEntity = repository.findById(id);
 		if (ordemEntity.isPresent()) {
 			Ordem entity = ordemEntity.get();
+			
 			movimentoAcoesService.excluir(id);
+			
 			entity.setStatus(false);
-			repository.save(entity);            
+			entity.setSituacaoPedido(SituacaoPedidoEnum.CANCELADO.toString());
+			
+			repository.save(entity);
+			logger.info("Ordem excluída logicamente com sucesso.");
 		} else {
 			throw new Exception("Ordem não encontrada");
 		}
