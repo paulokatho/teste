@@ -11,6 +11,7 @@ public class MovimentoAcoesDTO {
     private int quantidade;
     private Artigo artigo;
     private String transacaoId;
+    private boolean status;
     
 	public Long getId() {
 		return id;
@@ -35,6 +36,12 @@ public class MovimentoAcoesDTO {
 	}
 	public void setTransacaoId(String transacaoId) {
 		this.transacaoId = transacaoId;
+	}
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	public Artigo getArtigo() {
 		return artigo;
