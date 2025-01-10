@@ -2,6 +2,8 @@ package com.teste.pedidos.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class OrdemController {
 	@Autowired
 	private OrdemService service;
 	
+	private static final Logger logger = LoggerFactory.getLogger(OrdemController.class);
+	
 	@PostMapping
 	@Operation(summary = "Salva dados do pedido", description = "Método para salvar dados do pedido")
 	@ApiResponse(responseCode = "201", description = "Ordem gravado com sucesso")
@@ -35,14 +39,16 @@ public class OrdemController {
 	@ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<OrdemDTO> create(@RequestBody OrdemDTO dto) {
 				
-		System.out.println("Entrou no controller: ");
-		if(dto == null || dto.getId() != null)
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		if(dto == null || dto.getId() != null) {
+			logger.error("Erro na requisição.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();			
+		}
 		
 		try {
 			OrdemDTO responseDTO = service.guardar(dto);
 			return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);			
 		} catch (Exception e) {
+			logger.error("Erro ao gravar pedido.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}        
 	}
@@ -54,13 +60,16 @@ public class OrdemController {
 	@ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<OrdemDTO> obterPorId(@PathVariable Long id) {		
 		
-		if(id == null)
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		if(id == null) {
+			logger.error("Erro ao obter pedido por id. Erro na request.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();			
+		}
 		
 		try {
 			OrdemDTO responseDTO = service.obterPorId(id);
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Pedido não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}    
 	}
@@ -76,6 +85,7 @@ public class OrdemController {
 			List<OrdemDTO> responseDTO = service.obterPorStatus(status);
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Obter pedido por status não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}    
 	}
@@ -91,6 +101,7 @@ public class OrdemController {
 			List<OrdemDTO> responseDTO = service.obterTodos();
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Pedido não encontrado.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}   
 	}
@@ -104,8 +115,10 @@ public class OrdemController {
 	public ResponseEntity<OrdemDTO> atualizar(@PathVariable Long id,
 												@RequestBody OrdemDTO dto){
 		
-		if(dto == null)
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		if(dto == null) {
+			logger.error("Erro na requisição de atualizar pedido.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();			
+		}
 		
 		try {
 			//Atualiza somente o status = false
@@ -113,6 +126,7 @@ public class OrdemController {
 			OrdemDTO responseDTO = service.obterPorId(id);
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Pedido não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
