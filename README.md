@@ -1,8 +1,9 @@
-<h1>Serviço de Pedidos Simplificados<h2>
+<h1>Serviço de Pedidos Simplificados<h1>
   
 > Status: Developing ⚠️
 
-### Essa é uma aplicação web, onde realizo o CRUD para um serviço de pedido simplificado.
+<h3>Essa é uma aplicação web, onde realizo o CRUD para um serviço de pedido simplificado.</h3>
+<br>
 
 ## Além do CRUD, implemento outros recursos como:
 #### É possível um cliente realizar um pedido
