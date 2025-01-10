@@ -22,6 +22,9 @@ public class Artigo {
 
     @Column(nullable = false)
     private boolean status;
+    
+    @Column(nullable = false, length = 150)
+    private int quantidade;
 
 	public Long getId() {
 		return id;
@@ -45,6 +48,14 @@ public class Artigo {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	public Artigo(Long id, String nome, boolean status) {

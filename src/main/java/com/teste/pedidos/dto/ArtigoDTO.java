@@ -7,6 +7,7 @@ public class ArtigoDTO {
 	private Long id;
 	private String nome;
 	private boolean status;
+	private int quantidade;
 	
 	public Long getId() {
 		return id;
@@ -25,6 +26,12 @@ public class ArtigoDTO {
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+	public int getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 	public ArtigoDTO(Long id, String nome, boolean status) {
 		super();

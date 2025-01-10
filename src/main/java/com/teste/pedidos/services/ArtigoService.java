@@ -42,7 +42,22 @@ public class ArtigoService {
             Artigo artigo = artigoEntity.get();
             artigo.setNome(dto.getNome());
             artigo.setStatus(dto.isStatus());
+            artigo.setQuantidade(dto.getQuantidade());
             repository.save(artigo);
+        } else {
+        	throw new Exception("Artigo não encontrado");
+        }
+    }
+    
+    public ArtigoDTO atualizarQuantidade(ArtigoDTO dto) throws Exception { 	
+        Optional<Artigo> artigoEntity = repository.findById(dto.getId());
+        if (artigoEntity.isPresent()) {
+            Artigo artigo = artigoEntity.get();
+            artigo.setQuantidade(dto.getQuantidade());
+            
+            ArtigoDTO dtoResponse = mapper.paraArtigoDTO(repository.save(artigo)); 
+            
+            return dtoResponse;
         } else {
         	throw new Exception("Artigo não encontrado");
         }
