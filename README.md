@@ -59,3 +59,9 @@
 
 ## Swagger
 * Link: http://localhost:8090/swagger-ui/index.html#/E-mail/sendingEmail
+
+## Como rodar a aplicação:
+1. Depois do projeto configurado (fazer clone, maven update, ir até a classe **PedidosApplication.java** e rodar a aplicação
+2. Sugiro utilizar o STS para quem puder
+3. A partir desse momento o swagger já ficará disponível e também para ser acessado via Postman
+4. No Postman, basta abrir uma nova request e acrescentar a 
