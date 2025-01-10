@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.teste.pedidos.dto.ArtigoDTO;
-import com.teste.pedidos.entities.Artigo;
 import com.teste.pedidos.services.ArtigoService;
 
 import io.swagger.v3.oas.annotations.Operation;
