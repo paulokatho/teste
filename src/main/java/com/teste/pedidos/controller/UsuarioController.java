@@ -2,6 +2,8 @@ package com.teste.pedidos.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService service;
 	
+	private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
+	
 	@PostMapping
 	@Operation(summary = "Salva dados do usuario", description = "Método para salvar dados do usuario")
 	@ApiResponse(responseCode = "201", description = "Usuario gravado com sucesso")
@@ -36,13 +40,16 @@ public class UsuarioController {
 	@ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO dto) {
 				
-		if(dto == null || dto.getId() != null)
+		if(dto == null || dto.getId() != null) {
+			logger.error("Erro na requisição para guardar usuário.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 		
 		try {
 			UsuarioDTO responseDTO = service.guardar(dto);
 			return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);			
 		} catch (Exception e) {
+			logger.error("Erro na requisição para guardar usuário.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}        
 	}
@@ -54,13 +61,16 @@ public class UsuarioController {
 	@ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<UsuarioDTO> obterPorId(@PathVariable Long id) {		
 		
-		if(id == null)
+		if(id == null) {
+			logger.error("Erro na requisição para guardar usuário.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 		
 		try {
 			UsuarioDTO responseDTO = service.obterPorId(id);
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro na requisição para obter usuário por id.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}    
 	}
@@ -72,13 +82,16 @@ public class UsuarioController {
 	@ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<UsuarioDTO> obterPorEmailEStatus(@PathVariable String email, @PathVariable boolean status) {		
 		
-		if(email == null)
+		if(email == null) {
+			logger.error("Erro na requisição para obter usuário por id.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 		
 		try {
 			UsuarioDTO responseDTO = service.obterPorEmailEStatus(email, status);
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro na requisição para obter usuário por stauts e email. Usuário não encontrado");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}    
 	}
@@ -94,6 +107,7 @@ public class UsuarioController {
 			List<UsuarioDTO> responseDTO = service.obterTodos();
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro na requisição para obter todos os usuários.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}   
 	}
@@ -107,14 +121,17 @@ public class UsuarioController {
 	public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id,
 												@RequestBody UsuarioDTO dto){
 		
-		if(dto == null)
+		if(dto == null) {
+			logger.error("Erro na requisição para atualizar usuário.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 		
 		try {
 			service.atualizar(dto);
 			UsuarioDTO responseDTO = service.obterPorId(id);
 			return new ResponseEntity<>(responseDTO, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro na requisição para atualizar usuário. Usuário não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
@@ -127,14 +144,17 @@ public class UsuarioController {
 	@ApiResponse(responseCode = "500", description = "Erro no servidor")
 	public ResponseEntity<UsuarioDTO> excluir(@PathVariable Long id) {
 		
-		if(id == null)
+		if(id == null) {
+			logger.error("Erro na requisição para guardar usuário.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 		
 		try {
 			//Exclui logicamente
-			service.excluir(id);    		
-			return new ResponseEntity<>(new UsuarioDTO(), HttpStatus.OK);	
+			UsuarioDTO dto = service.excluir(id);    		
+			return new ResponseEntity<>(dto, HttpStatus.OK);	
 		} catch (Exception e) {
+			logger.error("Erro na requisição para excluir usuário logicamente. Usuário não encontrado.");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
