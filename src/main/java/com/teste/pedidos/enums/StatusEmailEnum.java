@@ -1,6 +1,6 @@
 package com.teste.pedidos.enums;
 
-public enum StatusEmail {
+public enum StatusEmailEnum {
 
 	PROCESSING,
     SENT,
