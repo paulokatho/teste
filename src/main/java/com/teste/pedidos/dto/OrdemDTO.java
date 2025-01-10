@@ -2,17 +2,16 @@ package com.teste.pedidos.dto;
 
 import java.time.LocalDateTime;
 
-import com.teste.pedidos.entities.Artigo;
-import com.teste.pedidos.entities.Usuario;
-
 public class OrdemDTO {
 
 	private Long id;
     private LocalDateTime dataCriacao;
     private int quantidade;
     private boolean status;
-    private Artigo artigo;
-    private Usuario usuario;
+    private String transacaoId;
+    private String situacaoPedido;
+    private ArtigoDTO artigo;
+    private UsuarioDTO usuario;
 	
     public Long getId() {
 		return id;
@@ -38,17 +37,41 @@ public class OrdemDTO {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	public Artigo getArtigo() {
+	public String getTransacaoId() {
+		return transacaoId;
+	}
+	public void setTransacaoId(String transacaoId) {
+		this.transacaoId = transacaoId;
+	}
+	public String getSituacaoPedido() {
+		return situacaoPedido;
+	}
+	public void setSituacaoPedido(String situacaoPedido) {
+		this.situacaoPedido = situacaoPedido;
+	}
+	public ArtigoDTO getArtigo() {
 		return artigo;
 	}
-	public void setArtigo(Artigo artigo) {
+	public void setArtigo(ArtigoDTO artigo) {
 		this.artigo = artigo;
 	}
-	public Usuario getUsuario() {
+	public UsuarioDTO getUsuario() {
 		return usuario;
 	}
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(UsuarioDTO usuario) {
 		this.usuario = usuario;
 	}
-     
+//	public ArtigoDTO getArtigoDTO() {
+//		return artigo;
+//	}
+//	public void setArtigoDTO(ArtigoDTO artigo) {
+//		this.artigo = artigo;
+//	}
+//	public UsuarioDTO getUsuarioDTO() {
+//		return usuario;
+//	}
+//	public void setUsuarioDTO(UsuarioDTO usuario) {
+//		this.usuario = usuario;
+//	}
+//     
 }

@@ -2,6 +2,7 @@ package com.teste.pedidos.entities;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,6 +30,12 @@ public class Ordem {
 
     @Column(nullable = false)
     private boolean status;
+    
+    @Column(nullable = false, updatable = false, unique = true)
+    private String transacaoId;
+    
+    @Column(nullable = false)
+    private String situacaoPedido;
 
     @ManyToOne
     @JoinColumn(name = "artigo_id")
@@ -68,6 +76,22 @@ public class Ordem {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public String getTransacaoId() {
+		return transacaoId;
+	}
+
+	public void setTransacaoId(String transacao) {
+		this.transacaoId = transacao;
+	}
+
+	public String getSituacaoPedido() {
+		return situacaoPedido;
+	}
+
+	public void setSituacaoPedido(String situacaoPedido) {
+		this.situacaoPedido = situacaoPedido;
 	}
 
 	public Artigo getArtigo() {
@@ -117,4 +141,9 @@ public class Ordem {
 		return Objects.equals(id, other.id);
 	}
     
+    @PrePersist
+    public void prePersist() {
+    	this.transacaoId = UUID.randomUUID().toString();
+        this.dataCriacao = LocalDateTime.now();
+    }
 }
