@@ -3,6 +3,8 @@ package com.teste.pedidos.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +22,13 @@ public class ArtigoService {
 	@Autowired(required = true)
 	private ArtigoMapper mapper;
 	
+	private static final Logger logger = LoggerFactory.getLogger(ArtigoService.class);
+	
 	public ArtigoDTO guardar(ArtigoDTO dto) throws Exception {		
 		Artigo artigo = repository.save(mapper.paraArtigo(dto));
+		
+		logger.info("Artigo gravado com sucesso.");
+		
 		return mapper.paraArtigoDTO(artigo);
 	}
 	
@@ -43,8 +50,12 @@ public class ArtigoService {
             artigo.setNome(dto.getNome());
             artigo.setStatus(dto.isStatus());
             artigo.setQuantidade(dto.getQuantidade());
+            
             repository.save(artigo);
+            
+            logger.info("Artigo atualizado com sucesso.");
         } else {
+        	logger.error("Artigo não encontrado.");
         	throw new Exception("Artigo não encontrado");
         }
     }
@@ -57,19 +68,27 @@ public class ArtigoService {
             
             ArtigoDTO dtoResponse = mapper.paraArtigoDTO(repository.save(artigo)); 
             
+            logger.info("Quantidade do artigo atualizado com sucesso.");
+            
             return dtoResponse;
         } else {
+        	logger.error("Artigo não encontrado.");
         	throw new Exception("Artigo não encontrado");
         }
     }
 
-    public void excluir(Long id) throws Exception { 
+    public ArtigoDTO excluir(Long id) throws Exception { 
         Optional<Artigo> artigoEntity = repository.findById(id);
+        Artigo entity = artigoEntity.get();
         if (artigoEntity.isPresent()) {
-        	Artigo entity = artigoEntity.get();
         	entity.setStatus(false);
-            repository.save(entity);            
+        	
+        	entity = repository.save(entity);
+        	logger.info("Artigo excluído logicamente com sucesso.");
+        	
+        	return mapper.paraArtigoDTO(entity);
         } else {
+        	logger.error("Artigo não encontrado.");
         	throw new Exception("Artigo não encontrado");
         }
     }
