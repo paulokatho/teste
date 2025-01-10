@@ -2,7 +2,7 @@ package com.teste.pedidos.dto;
 
 import java.time.LocalDateTime;
 
-import com.teste.pedidos.enums.StatusEmail;
+import com.teste.pedidos.enums.StatusEmailEnum;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public class EmailDTO {
     @NotNull
     private LocalDateTime sendDateEmail;
   
-    private StatusEmail statusEmail;
+    private StatusEmailEnum statusEmail;
     
 	public Long getEmailId() {
 		return emailId;
@@ -68,10 +68,10 @@ public class EmailDTO {
 	public void setSendDateEmail(LocalDateTime sendDateEmail) {
 		this.sendDateEmail = sendDateEmail;
 	}
-	public StatusEmail getStatusEmail() {
+	public StatusEmailEnum getStatusEmail() {
 		return statusEmail;
 	}
-	public void setStatusEmail(StatusEmail statusEmail) {
+	public void setStatusEmail(StatusEmailEnum statusEmail) {
 		this.statusEmail = statusEmail;
 	}
     
