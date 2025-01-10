@@ -2,7 +2,7 @@
   
 > Status: Developing ⚠️
 
-### Essa é uma aplicação web planejada por mim, onde realizo o CRUD para um serviço de pedido simplificado.
+### Essa é uma aplicação web, onde realizo o CRUD para um serviço de pedido simplificado.
 
 ## Além do CRUD, implemento outros recursos como:
 #### É possível um cliente realizar um pedido
@@ -55,3 +55,6 @@
     <td>Defalut</td>
   </tr>
 </table>
+
+## Swagger
+* Link: http://localhost:8090/swagger-ui/index.html#/E-mail/sendingEmail
