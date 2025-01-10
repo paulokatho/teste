@@ -10,6 +10,7 @@ public class MovimentoAcoesDTO {
     private LocalDateTime dataCriacao;
     private int quantidade;
     private Artigo artigo;
+    private String transacaoId;
     
 	public Long getId() {
 		return id;
@@ -28,6 +29,12 @@ public class MovimentoAcoesDTO {
 	}
 	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
+	}
+	public String getTransacaoId() {
+		return transacaoId;
+	}
+	public void setTransacaoId(String transacaoId) {
+		this.transacaoId = transacaoId;
 	}
 	public Artigo getArtigo() {
 		return artigo;
